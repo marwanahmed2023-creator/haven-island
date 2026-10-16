@@ -26,7 +26,7 @@ On touch screens, use the on-screen movement controls and drag the world to look
 
 ## 3D asset credits
 - Trees and rocks use models from **Kenney Nature Kit**, licensed CC0: https://kenney.nl/assets/nature-kit
-- Animal models are now built from smooth procedural Three.js shapes so the game does not depend on the blocky external animal packs.
+- Wildlife uses detailed GLB models: the deer-like animal uses the Three.js example horse model, while foxes use the Khronos glTF Sample Assets Fox model. If a model cannot load, a non-spherical fallback remains visible. The GLB files are fetched from their public hosts, so they are not bundled inside this repository.
 - Three.js and its GLTFLoader are used under the Three.js MIT license: https://github.com/mrdoob/three.js/blob/dev/LICENSE
 
 ## Game notes
