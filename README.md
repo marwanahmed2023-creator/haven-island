@@ -6,7 +6,7 @@ A browser-based, low-poly 3D island survival and exploration game.
 Open `index.html` in a modern browser with internet access. The game loads Three.js from jsDelivr, so an internet connection is needed.
 
 ## Controls
-- **WASD** to move
+- **WASD** to move (movement keys, speed, and mouse sensitivity are adjustable in **Settings**)
 - **Mouse** to look around
 - **Click** to gather/use items
 - **E** to interact
@@ -23,6 +23,12 @@ On touch screens, use the on-screen movement controls and drag the world to look
 3. Under **Build and deployment**, set **Source** to **GitHub Actions**.
 4. Open the **Actions** tab and run **Deploy Haven Island to GitHub Pages** if it doesn't start automatically.
 5. The expected site URL is `https://marwanahmed2023-creator.github.io/haven-island/`.
+
+## 3D asset credits
+- Trees and rocks use models from **Kenney Nature Kit**, licensed CC0: https://kenney.nl/assets/nature-kit
+- Animal models use **Kenney Cube Pets**, licensed CC0: https://kenney.nl/assets/cube-pets
+- The game loads these lightweight GLB files from the public asset library at https://github.com/Hidencod/tge-assets. A procedural fallback remains if an asset cannot load.
+- Three.js and its GLTFLoader are used under the Three.js MIT license: https://github.com/mrdoob/three.js/blob/dev/LICENSE
 
 ## Game notes
 Haven Island is an original project inspired by the broad survival-crafting genre. It does not include Tribals.io proprietary code or assets. The current version is a playable foundation; the longer expedition and progression can be expanded in future updates.
