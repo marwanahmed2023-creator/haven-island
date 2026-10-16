@@ -26,8 +26,8 @@ On touch screens, use the on-screen movement controls and drag the world to look
 
 ## 3D asset credits
 - Trees and rocks use models from **Kenney Nature Kit**, licensed CC0: https://kenney.nl/assets/nature-kit
-- Animal models use **Kenney Cube Pets**, licensed CC0: https://kenney.nl/assets/cube-pets
-- The game loads these lightweight GLB files from the public asset library at https://github.com/Hidencod/tge-assets. A procedural fallback remains if an asset cannot load.
+- Wildlife visuals use the **Deer Grazing**, **Red Fox**, and **Tree Squirrel** GLB models from Innerscene's public-domain library, released under CC0: https://www.innerscene.com/tools/library/3d-parts/deer-grazing-f586dbe8 · https://www.innerscene.com/tools/library/3d-parts/red-fox-e5cb59a3 · https://www.innerscene.com/tools/library/3d-parts/tree-squirrel-6499352e
+- The models load from Innerscene's public GLB endpoints at runtime. If an external model cannot load, the game keeps its built-in smooth procedural animal fallback.
 - Three.js and its GLTFLoader are used under the Three.js MIT license: https://github.com/mrdoob/three.js/blob/dev/LICENSE
 
 ## Game notes
