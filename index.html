@@ -84,7 +84,7 @@ let scene,camera,renderer,clock,world=[],targets=[],decor=[],islands=[],player={
 const inv={wood:0,stone:0,berries:3,seeds:2,carrots:0,planks:0,fiber:0,meat:0,cookedMeat:0,hide:0,bones:0,ore:0,rope:0,crystal:0,relics:0,fish:0,torch:0,backpack:0,maps:0};
 let questStage=0,hasShovel=false,hasBoat=false,hasHuntKit=false,hasCompass=false,hasBench=false,gameWon=false,animals=[],boatVisual=null,craftedItems={};
 const questHints=[
- 'Look for the leaning crooked tree near the centre of your home island. The glowing gold marker just southeast of it marks the first buried clue. Craft a shovel, equip it, then click the marker.',
+ 'Look for the leaning crooked tree near the centre of your home island. The first buried clue is just southeast of it, at the small stone-marked mound. Craft a shovel, equip it, then click the mound.',
  'The first carving points east, to the sun-baked island. Sail there and search the marked stones.',
  'The second carving mentions reeds and still water. Find the marsh island west of home.',
  'The third clue speaks of cold wind and a split ridge. Search the far northern island.',
@@ -171,27 +171,24 @@ for(let i=0;i<13;i++){let isl=islands[i%6],a=rand(0,Math.PI*2),r=rand(5,isl.r*.6
 const spots=[{x:7,z:0,stage:0},{x:92,z:-48,stage:1},{x:-104,z:68,stage:2},{x:-184,z:-92,stage:3},{x:155,z:94,stage:4},{x:26,z:168,stage:5},{x:245,z:255,stage:6},{x:365,z:-280,stage:7}];spots.forEach(p=>makeDigSpot(p.x,p.z,p.stage));
 for(let i=0;i<28;i++){let a=rand(0,Math.PI*2),r=rand(35,150),x=Math.cos(a)*r,z=Math.sin(a)*r;const isl=islands.find(q=>Math.hypot(x-q.x,z-q.z)<q.r*.83);if(isl){let shell=group();shell.position.set(x,groundHeight(x,z)+.05,z);mesh(new THREE.SphereGeometry(.16,7,5),new THREE.MeshStandardMaterial({color:0xe8d4ad}),0,.08,0,shell);shell.userData={type:'shell',hp:1};targets.push(shell);world.push(shell)}}}
 function makeAnimal(x,z,kind){
-const g=group();
-const coat=kind==='deer'?0x986b48:kind==='boar'?0x62554a:0xc8bda2;
-const fur=new THREE.MeshStandardMaterial({color:coat,roughness:.94});
-const dark=new THREE.MeshStandardMaterial({color:kind==='deer'?0x6b4934:kind==='boar'?0x403b35:0x9e9282,roughness:1});
-const cream=new THREE.MeshStandardMaterial({color:0xe9ddc5,roughness:1});
-const body=mesh(new THREE.SphereGeometry(.42,16,12),fur,0,.62,0,g);body.scale.set(1.28,.82,.72);
-const chest=mesh(new THREE.SphereGeometry(.27,14,10),fur,0,.57,-.25,g);chest.scale.set(.82,1.05,.8);
-const head=mesh(new THREE.SphereGeometry(.22,16,12),fur,0,.84,-.43,g);head.scale.set(.9,.95,1.05);
-const muzzle=mesh(new THREE.SphereGeometry(kind==='boar'?.15:.105,12,9),kind==='boar'?dark:fur,0,.76,-.61,g);muzzle.scale.set(kind==='boar'?1.15:.85,.72,1.05);
-for(let i=0;i<4;i++){const leg=mesh(new THREE.CylinderGeometry(.052,.062,.38,10),fur,(i<2?-.27:.27),.31,i%2===0?-.25:.25,g);leg.rotation.x=(i%2===0?-.1:.1);mesh(new THREE.SphereGeometry(.065,10,8),dark,(i<2?-.27:.27),.12,i%2===0?-.25:.25,g)}
-if(kind==='deer'){
- for(const side of [-1,1]){const ear=mesh(new THREE.SphereGeometry(.07,12,8),fur,side*.2,1.02,-.42,g);ear.scale.set(.55,1.8,.55);const antler=mesh(new THREE.CylinderGeometry(.018,.03,.25,8),cream,side*.1,1.14,-.43,g);antler.rotation.z=side*-.28}
- const tail=mesh(new THREE.SphereGeometry(.09,10,8),cream,0,.7,.48,g);tail.scale.set(.8,1,.65);
-}else if(kind==='boar'){
- const snout=mesh(new THREE.SphereGeometry(.095,12,8),dark,0,.76,-.72,g);snout.scale.set(1,.8,.55);
- for(const side of [-1,1]){const ear=mesh(new THREE.SphereGeometry(.08,10,8),dark,side*.19,1.02,-.38,g);ear.scale.set(.7,1.3,.65)}
-}else{
- for(const side of [-1,1]){const ear=mesh(new THREE.SphereGeometry(.075,12,8),fur,side*.15,1.06,-.4,g);ear.scale.set(.6,1.55,.5)}
- const tail=mesh(new THREE.SphereGeometry(.1,12,8),fur,0,.66,.5,g);tail.scale.set(.7,.7,1.4);
-}
-g.position.set(x,groundHeight(x,z),z);g.userData={type:'animal',kind,hp:3,flee:false,resource:'meat',label:kind};targets.push(g);world.push(g);animals.push(g);return g
+ const g=group();
+ // A compact, non-spherical fallback stays visible while the detailed GLB loads.
+ const coat=kind==='deer'?0x986b48:kind==='fox'?0xc66c32:0x9a8a78;
+ const fur=new THREE.MeshStandardMaterial({color:coat,roughness:.96});
+ const dark=new THREE.MeshStandardMaterial({color:0x40362e,roughness:1});
+ const body=mesh(new THREE.CapsuleGeometry(.23,.48,5,8),fur,0,.62,0,g);body.rotation.x=Math.PI/2;body.scale.set(1,.86,.9);
+ const neck=mesh(new THREE.CapsuleGeometry(.105,.25,4,7),fur,0,.78,-.27,g);neck.rotation.x=-.42;
+ const head=mesh(new THREE.ConeGeometry(.15,.32,8),fur,0,.9,-.46,g);head.rotation.x=-Math.PI/2;
+ for(let i=0;i<4;i++){const leg=mesh(new THREE.CylinderGeometry(.035,.045,.34,7),fur,(i<2?-.18:.18),.28,i%2===0?-.22:.22,g);leg.rotation.x=(i%2===0?-.08:.08)}
+ if(kind==='deer'){for(const side of [-1,1]){const ear=mesh(new THREE.ConeGeometry(.045,.2,6),fur,side*.14,1.04,-.42,g);ear.rotation.z=side*-.5;const antler=mesh(new THREE.CylinderGeometry(.012,.024,.22,6),dark,side*.09,1.13,-.43,g);antler.rotation.z=side*-.28}}
+ else {const tail=mesh(new THREE.ConeGeometry(.095,.38,8),fur,0,.66,.36,g);tail.rotation.x=Math.PI*.62;if(kind==='fox')mesh(new THREE.SphereGeometry(.075,8,6),new THREE.MeshStandardMaterial({color:0xf1e5d0}),0,.68,.53,g);else for(const side of [-1,1]){const ear=mesh(new THREE.ConeGeometry(.04,.16,6),fur,side*.12,1.03,-.42,g);ear.rotation.z=side*-.2}}
+ g.position.set(x,groundHeight(x,z),z);
+ const modelUrl=kind==='deer'
+  ?'https://threejs.org/examples/models/gltf/Horse.glb'
+  :'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/Fox/glTF-Binary/Fox.glb';
+ const targetHeight=kind==='deer'?1.45:kind==='fox'?.92:.48;
+ loadAssetVisual(g,modelUrl,targetHeight);
+ g.userData={type:'animal',kind,hp:3,flee:false,resource:'meat',label:kind};targets.push(g);world.push(g);animals.push(g);return g
 }
 function makeDigSpot(x,z,stage){let g=group();g.position.set(x,groundHeight(x,z),z);mesh(new THREE.CylinderGeometry(.75,.9,.2,8),mats.soil,0,.1,0,g);mesh(new THREE.DodecahedronGeometry(.28,0),mats.stone,.18,.28,.05,g);mesh(new THREE.DodecahedronGeometry(.2,0),mats.stone,-.24,.24,-.1,g);g.userData={type:'digspot',stage,label:stage===0?'First clue marker':'Buried clue'};targets.push(g);world.push(g)}
 function digQuestSpot(obj,d){if(!hasShovel||selected!=='shovel'){notify('This looks deliberately buried. Equip a crafted shovel first.');return}if(d.stage<questStage){notify('You already searched this site. Check the journal for the next clue.');return}if(d.stage>questStage){notify('The marks are unfamiliar. Follow the current clue in your journal first.');return}if(d.stage===7){if(!craftedItems.ancientkey||inv.relics<3||!hasBoat||!hasCompass){notify('The Lost Beacon needs the ancient key, three relic fragments, a boat, and a compass.');return}inv.relics-=3;gameWon=true;questStage=8;notify('The Lost Beacon rises from the sand. The Haven Legend is complete!');$('victory').classList.add('show');save();updateUI();return}questStage++;inv.relics++;if(d.stage===0){inv.crystal+=1;notify('Clue one found! A crystal fragment and a carving point toward Sunscar Dunes.')}else if(d.stage===1){inv.ore+=2;notify('Clue two found! The marsh route is sketched on a weathered strip.')}else if(d.stage===2){inv.crystal+=1;notify('Clue three found! The highland seal glows faintly.')}else if(d.stage===3){inv.ore+=2;notify('Clue four found! The black-rock shore is marked next.')}else if(d.stage===4){inv.crystal+=1;notify('Clue five found! The old chart points toward Pinewatch.')}else if(d.stage===5){inv.ore+=2;notify('Clue six found! Coral Reach is marked beyond the southern sea.')}else{inv.crystal+=1;notify('Clue seven found! The Forgotten Isle is now marked in your journal.')}save();updateUI();renderExpedition('journal')}
