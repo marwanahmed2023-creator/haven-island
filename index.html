@@ -155,7 +155,7 @@ const recipes=[
 {id:'map',name:'Explorer map',desc:'Record the island chain in your journal.',cost:{fiber:3,planks:1},out:{maps:1}},
 {id:'shelter',name:'Timber shelter',desc:'Build a small shelter for your island camp.',cost:{wood:12,planks:4,rope:2},effect:()=>placeProp('shelter')},
 {id:'smokehouse',name:'Smoke rack',desc:'Prepare food supplies for long trips.',cost:{wood:8,stone:2,rope:2},effect:()=>placeProp('smoker')},
-{id:'ancientkey',name:'Ancient seal key',desc:'Use four relic fragments to shape a key for the Lost Beacon.',cost:{relics:4,ore:3},effect:()=>{craftedItems.ancientkey=true;notify('The ancient key is complete. Keep three relic fragments for the final seal.')} }
+{id:'ancientkey',name:'Ancient seal key',desc:'Forge the key from 3 ore. Relic fragments are not required for crafting.',cost:{ore:3},effect:()=>{craftedItems.ancientkey=true;notify('The ancient key is complete! Head to the Forgotten Isle with your boat and compass.')} }
 ];
 function canCraft(r){return Object.entries(r.cost).every(([k,v])=>(inv[k]||0)>=v)&&!(r.id==='axe'&&hasAxe)&&!(r.id==='pick'&&hasPick)&&!(r.id==='shovel'&&hasShovel)&&!(r.id==='tracking'&&hasHuntKit)&&!(r.id==='raft'&&hasBoat)&&!(r.id==='compass'&&hasCompass)&&!(r.id==='workbench'&&hasBench)&&!(r.id==='ancientkey'&&craftedItems.ancientkey)}
 function craftRecipe(id){let r=recipes.find(x=>x.id===id);if(!r||!canCraft(r)){notify('Not enough materials yet — forage, gather, and explore.');return}for(const [k,v] of Object.entries(r.cost))inv[k]-=v;if(r.out)for(const [k,v] of Object.entries(r.out))inv[k]=(inv[k]||0)+v;if(r.effect)r.effect();craftedItems[id]=true;save();updateUI();renderExpedition('craft')}
